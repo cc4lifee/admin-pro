@@ -6,6 +6,8 @@ import { tap, map, catchError, of } from 'rxjs';
 import { RegisterForm } from '../interfaces/register-form.interface';
 import { LoginForm } from '../interfaces/login-form.interface';
 
+import { Usuario } from '../models/usuario.model';
+
 declare const google: any;
 
 const base_url = enviroment.base_url;
@@ -15,12 +17,13 @@ const base_url = enviroment.base_url;
 })
 export class UsuarioService {
 
+  public usuario?: Usuario;
+
   constructor(private http: HttpClient, private router: Router) { }
 
   logout() {
     localStorage.removeItem('token');
 
-    
     google.accounts.id.revoke('cristhian.camacho@gulfstream.com', () => {
       this.router.navigateByUrl('/login')
 
@@ -36,6 +39,12 @@ export class UsuarioService {
       }
     }).pipe(
       tap((resp: any) => {
+        console.log(resp);
+
+        const { email, google, nombre, role, img, uid } = resp.usuario;
+
+        this.usuario = new Usuario( nombre, email, '', img, google, role, uid );
+
         localStorage.setItem('token', resp.token)
 
       }), map(resp => true),
