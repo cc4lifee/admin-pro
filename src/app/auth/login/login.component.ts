@@ -49,7 +49,6 @@ export class LoginComponent implements AfterViewInit {
 
   handleCredentialResponse(response: any) {
     // console.log("Encoded JWT ID token: " + response.credential);
-
     this.usuarioService.loginGoogle(response.credential).subscribe(resp => {
       // console.log({ login: resp });
       //Navegar al dashboard
