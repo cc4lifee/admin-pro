@@ -7,6 +7,7 @@ import { RegisterForm } from '../interfaces/register-form.interface';
 import { LoginForm } from '../interfaces/login-form.interface';
 
 import { Usuario } from '../models/usuario.model';
+import { CargarUsuario } from '../interfaces/cargar-usuarios.interface';
 
 declare const google: any;
 
@@ -21,12 +22,21 @@ export class UsuarioService {
 
   constructor(private http: HttpClient, private router: Router) { }
 
-  get token(): string { 
+  get token(): string {
     return localStorage.getItem('token') || '';
   }
 
-  get uid(): string { 
+  get uid(): string {
     return this.usuario?.uid || '';
+  }
+
+  get headers() {
+    return {
+      headers: {
+        'x-token': this.token
+      }
+    }
+
   }
 
   logout() {
@@ -45,9 +55,9 @@ export class UsuarioService {
         'x-token': this.token
       }
     }).pipe(
-      map((resp: any) => {    
+      map((resp: any) => {
         const { email, google, nombre, role, img = '', uid } = resp.usuario;
-        this.usuario = new Usuario( nombre, email, '', img, google, role, uid );
+        this.usuario = new Usuario(nombre, email, '', img, google, role, uid);
         localStorage.setItem('token', resp.token)
         return true;
       }),
@@ -63,15 +73,14 @@ export class UsuarioService {
     )
   }
 
-  actualizarPerfil(data: { email:string, nombre: string, role?: string  }) {
+  actualizarPerfil(data: { email: string, nombre: string, role?: string }) {
 
-    console.log(data);
     data = {
       ...data,
       role: this.usuario?.role
     };
 
-    return this.http.put(`${base_url}/usuarios/${this.uid}`, data , {
+    return this.http.put(`${base_url}/usuarios/${this.uid}`, data, {
       headers: {
         'x-token': this.token
       }
@@ -94,6 +103,13 @@ export class UsuarioService {
         localStorage.setItem('token', resp.token)
       })
     )
+  }
+
+  cargarUsuarios(desde: number = 0) {
+
+    const url = `${base_url}/usuarios?desde=${desde}`
+    return this.http.get<CargarUsuario>(url, this.headers);
+
   }
 
 }
