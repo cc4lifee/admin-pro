@@ -3,14 +3,18 @@
         <div class="card">
             <div class="card-body">
 
-                <input type="text" class="form-control" placeholder="Buscar usuario...">
+                <input  type="text" 
+                        class="form-control" 
+                        placeholder="Buscar usuario..." 
+                        (keyup)="buscar(txtTermino.value)"
+                        #txtTermino>
 
             </div>
         </div>
     </div>
 </div>
 
-<div class="row animated fadeIn fast">
+<div class="row animated fadeIn fast" *ngIf="cargando">
     <div class="col-12">
 
         <div class="alert alert-info text-center">
@@ -23,53 +27,53 @@
     </div>
 </div>
 
-<div class="row">
-
+<div class="row animated fadeIn fast" *ngIf="!cargando">
     <div class="col-12">
         <div class="card">
             <div class="card-body">
-                <h4 class="card-title">Total de usuarios ({{this.totalUsuarios}}) - {{this.desde}}</h4>
+                <h4 class="card-title">Total de usuarios ({{this.totalUsuarios}})</h4>
                 <h6 class="card-subtitle">Usuarios registrados en mi aplicación</h6>
                 <div class="table-responsive">
                     <table class="table table-bordered">
                         <thead>
                             <tr>
-                                <th>Avatar</th>
+                                <th class="w100">Avatar</th>
                                 <th>Correo</th>
                                 <th>Nombre</th>
-                                <th>Role</th>
-                                <th>Auth</th>
-                                <th class="text-nowrap">Acciones</th>
+                                <th class="w100">Role</th>
+                                <th class="w100">Auth</th>
+                                <th class="text-nowrap w100">Acciones</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr *ngFor="let usuario of usuarios">
-                                <td>xxxxxxxx</td>
+                                <td class="text-center">
+                                    <img [src]="usuario.imagenUrl" class="avatar" alt="Avatar de usuario w100">
+                                    
+                                </td>
                                 <td>{{usuario.email}}</td>
                                 <td>{{usuario.nombre}}</td>
                                 <td>{{usuario.role}}</td>
 
                                 <td>
-                                    <span class="label label-danger">Google</span>
-                                    <span class="label label-info">Email</span>
+                                    <span *ngIf="usuario.google" class="label label-danger">Google</span>
+                                    <span *ngIf="!usuario.google" class="label label-info">Email</span>
                                 </td>
 
-                                <td>Lunar probe project</td>
-
-                                <td class="text-nowrap">
-                                    <a href="#" data-toggle="tooltip" data-original-title="Edit"> <i
-                                            class="fa fa-pencil text-inverse m-r-10"></i> </a>
-                                    <a href="#" data-toggle="tooltip" data-original-title="Close"> <i
-                                            class="fa fa-close text-danger"></i> </a>
+                                <td class="text-nowrap text-center">
+                                    <a href="#" data-toggle="tooltip" data-original-title="Edit"> <i class="fa fa-pencil text-inverse m-r-10"></i> </a>
+                                    <a  data-toggle="tooltip" data-original-title="Borrar" (click)="eliminarUsuario(usuario)"> <i class="fa fa-close text-danger"></i> </a>
                                 </td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
 
-                <button (click)="cambiarPagina(-5)" class="btn btn-secondary">Anteriores</button>
-                &nbsp;
-                <button (click)="cambiarPagina(+5)" class="btn btn-secondary">Siguientes</button>
+                <div *ngIf="txtTermino.value.length === 0">
+                    <button (click)="cambiarPagina(-5)" class="btn btn-secondary">Anteriores</button>
+                    &nbsp;
+                    <button (click)="cambiarPagina(+5)" class="btn btn-secondary">Siguientes</button>
+                </div>
 
             </div>
         </div>

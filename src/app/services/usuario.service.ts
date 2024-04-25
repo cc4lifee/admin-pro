@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { enviroment } from '../environments/environment';
-import { tap, map, catchError, of } from 'rxjs';
+import { tap, map, catchError, of, delay } from 'rxjs';
 import { RegisterForm } from '../interfaces/register-form.interface';
 import { LoginForm } from '../interfaces/login-form.interface';
 
@@ -108,8 +108,23 @@ export class UsuarioService {
   cargarUsuarios(desde: number = 0) {
 
     const url = `${base_url}/usuarios?desde=${desde}`
-    return this.http.get<CargarUsuario>(url, this.headers);
+    return this.http.get<CargarUsuario>(url, this.headers)
+      .pipe(
+        map(resp => {
+          const usuarios = resp.usuarios.map(user => new Usuario(user.nombre, user.email, '', user.img, user.google, user.role, user.uid))
 
+          return {
+            total: resp.total,
+            usuarios
+          }
+        }
+        )
+      )
+  }
+
+  eliminarUsuario(usuario:Usuario){
+    const url = `${base_url}/usuarios/${usuario.uid}`
+    return this.http.delete(url, this.headers);
   }
 
 }
