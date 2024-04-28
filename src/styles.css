@@ -5,20 +5,39 @@
   animation-fill-mode: both;
 }
 
-#themecolors .selector, .cursor {
+#themecolors .selector,
+.cursor {
   cursor: pointer;
 }
 
-.googleBtn{
+.googleBtn {
   display: flex;
-    justify-content: center;
+  justify-content: center;
 }
 
-.w100{
+.w100 {
   width: 100px;
 }
 
-.avatar{
+.avatar {
   width: 60px;
   border-radius: 100%;
+}
+
+.w140 {
+  width: 140px;
+}
+
+.oculto{
+  display:none;
+}
+
+.fondo-modal-imagen {
+  background-color: rgba(0, 0, 0, 0.4);
+  left: 0px;
+  height: 100%;
+  position: fixed;
+  top: 0px;
+  width: 100%;
+  z-index: 9999;
 }

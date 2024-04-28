@@ -78,13 +78,10 @@ export class UsuarioService {
     data = {
       ...data,
       role: this.usuario?.role
-    };
-
-    return this.http.put(`${base_url}/usuarios/${this.uid}`, data, {
-      headers: {
-        'x-token': this.token
-      }
-    });
+    }
+    
+    return this.http.put(`${base_url}/usuarios/${this.uid}`, data, this.headers
+    );
 
   }
 
@@ -125,6 +122,12 @@ export class UsuarioService {
   eliminarUsuario(usuario:Usuario){
     const url = `${base_url}/usuarios/${usuario.uid}`
     return this.http.delete(url, this.headers);
+  }
+
+  guardarUsuario(usuario:Usuario) {
+    return this.http.put(`${base_url}/usuarios/${usuario.uid}`, usuario, this.headers
+    );
+
   }
 
 }
