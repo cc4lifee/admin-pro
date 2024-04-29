@@ -44,7 +44,7 @@ export class PerfilComponent implements OnInit {
       }, (err) => {
         Swal.fire('Error', err.error.msg, 'error');
       });
-}
+  }
   cambiarImagen(file: File) {
     this.imagenSubir = file;
 
@@ -53,29 +53,23 @@ export class PerfilComponent implements OnInit {
     }
 
     const reader = new FileReader();
-    reader.readAsDataURL( file );
+    reader.readAsDataURL(file);
 
     reader.onloadend = () => {
       this.imgTemp = reader.result;
-     
     }
-
-
   }
 
   subirImagen() {
-
     this.fileUploadService
-      .actualizarFoto( this.imagenSubir, 'usuarios', this.usuario.uid! )
-      .then( img => {
+      .actualizarFoto(this.imagenSubir, 'usuarios', this.usuario.uid!)
+      .then(img => {
         this.usuario.img = img;
         Swal.fire('Guardado', 'Imagen de usuario actualizada', 'success');
-      }).catch( err => {
+      }).catch(err => {
         console.log(err);
         Swal.fire('Error', 'No se pudo subir la imagen', 'error');
       })
-
   }
-
 
 }
